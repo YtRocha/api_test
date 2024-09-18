@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class CardSet {
 
     @Id
+    @Column(length = 10)
     private String set_code;
     @Column(nullable = false)
     private String set_name;
