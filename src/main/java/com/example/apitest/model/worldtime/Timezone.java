@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.OffsetDateTime;
 
-
+/**
+ * A entidade Timezone
+ */
 @Entity
 @Data
 public class Timezone {
