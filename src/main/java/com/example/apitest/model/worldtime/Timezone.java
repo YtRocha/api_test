@@ -7,7 +7,7 @@ import java.time.OffsetDateTime;
 
 @Entity
 @Data
-public class timezone {
+public class Timezone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
