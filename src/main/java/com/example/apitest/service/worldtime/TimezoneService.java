@@ -1,16 +1,21 @@
 package com.example.apitest.service.worldtime;
 
+import com.example.apitest.dto.worldtime.TimezoneCreateDto;
 import com.example.apitest.dto.worldtime.TimezoneDto;
 import com.example.apitest.model.worldtime.Timezone;
 import com.example.apitest.repository.worldtime.TimezoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriUtils;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.time.*;
+import java.time.temporal.IsoFields;
 import java.util.List;
 
 /**
@@ -72,5 +77,31 @@ public class TimezoneService {
 
         timezoneRepository.save(timezone);
         return timezoneDto;
+    }
+
+    /**
+     * Cria no banco de dados um novo timezone usando o zoneId e as funções de dateTime do java
+     *
+     * @param timezoneCreateDto
+     */
+    public void createTimezone(TimezoneCreateDto timezoneCreateDto) {
+
+        Timezone timezone = new Timezone();
+
+        ZoneId zoneId = ZoneId.of(timezoneCreateDto.getTimezone());
+        ZoneOffset offset = zoneId.getRules().getOffset(Instant.now());
+        String utcOffset = offset.getId();
+
+        timezone.setTimezone(timezoneCreateDto.getTimezone());
+        timezone.setUtc_offset(utcOffset);
+        timezone.setDay_of_week(LocalDate.now(zoneId).getDayOfWeek().getValue());
+        timezone.setDay_of_year(LocalDate.now(zoneId).getDayOfYear());
+        OffsetDateTime datetime = OffsetDateTime.now(zoneId);
+        timezone.setDatetime(datetime);
+        timezone.setUtc_datetime(datetime.withOffsetSameInstant(ZoneOffset.UTC));
+        timezone.setUnixtime(Instant.now().getEpochSecond());
+        timezone.setWeek_number(LocalDate.now(zoneId).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+
+        timezoneRepository.save(timezone);
     }
 }
