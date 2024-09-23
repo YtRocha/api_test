@@ -2,6 +2,7 @@ package com.example.apitest.service.worldtime;
 
 import com.example.apitest.dto.worldtime.TimezoneCreateDto;
 import com.example.apitest.dto.worldtime.TimezoneDto;
+import com.example.apitest.dto.worldtime.TimezoneUpdateDto;
 import com.example.apitest.model.worldtime.Timezone;
 import com.example.apitest.repository.worldtime.TimezoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriUtils;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.sql.Time;
 import java.time.*;
 import java.time.temporal.IsoFields;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A service para Timezone
@@ -103,5 +107,40 @@ public class TimezoneService {
         timezone.setWeek_number(LocalDate.now(zoneId).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
 
         timezoneRepository.save(timezone);
+    }
+
+    /**
+     * Atualiza pelo id uma timezone no banco de dados
+     *
+     * @param timezoneId
+     * @param timezoneUpdateDto
+     */
+    public void updateTimezone(Long timezoneId, TimezoneUpdateDto timezoneUpdateDto) {
+
+        Optional<Timezone> timezoneAntigo = timezoneRepository.findById(timezoneId);
+
+        if (timezoneAntigo.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Timezone não encontrado");
+        }
+
+        Timezone timezone = new Timezone();
+        timezone.setId(timezoneId);
+
+        ZoneId zoneId = ZoneId.of(timezoneUpdateDto.getTimezone());
+        ZoneOffset offset = zoneId.getRules().getOffset(Instant.now());
+        String utcOffset = offset.getId();
+
+        timezone.setTimezone(timezoneUpdateDto.getTimezone());
+        timezone.setUtc_offset(utcOffset);
+        timezone.setDay_of_week(LocalDate.now(zoneId).getDayOfWeek().getValue());
+        timezone.setDay_of_year(LocalDate.now(zoneId).getDayOfYear());
+        OffsetDateTime datetime = OffsetDateTime.now(zoneId);
+        timezone.setDatetime(datetime);
+        timezone.setUtc_datetime(datetime.withOffsetSameInstant(ZoneOffset.UTC));
+        timezone.setUnixtime(Instant.now().getEpochSecond());
+        timezone.setWeek_number(LocalDate.now(zoneId).get(IsoFields.WEEK_OF_WEEK_BASED_YEAR));
+
+        timezoneRepository.save(timezone);
+
     }
 }

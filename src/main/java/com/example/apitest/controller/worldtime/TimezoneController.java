@@ -2,6 +2,7 @@ package com.example.apitest.controller.worldtime;
 
 import com.example.apitest.dto.worldtime.TimezoneCreateDto;
 import com.example.apitest.dto.worldtime.TimezoneDto;
+import com.example.apitest.dto.worldtime.TimezoneUpdateDto;
 import com.example.apitest.service.worldtime.TimezoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -105,4 +106,30 @@ public class TimezoneController {
         }
 
     }
+
+    /**
+     * Rota para atualizar por id uma timezone para outra
+     *
+     * @param timezoneId
+     * @param timezoneUpdateDto
+     * @return No_content
+     */
+    @PutMapping("/{timezoneId}")
+    public ResponseEntity<Void> updateTimezone(@PathVariable("timezoneId") Long timezoneId,
+                                               @RequestBody TimezoneUpdateDto timezoneUpdateDto) {
+        try {
+
+            ZoneId zoneId = ZoneId.of(timezoneUpdateDto.getTimezone());
+
+            timezoneService.updateTimezone(timezoneId, timezoneUpdateDto);
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+        } catch (DateTimeException e) {
+
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Timezone invalida");
+        }
+
+    }
+
 }
