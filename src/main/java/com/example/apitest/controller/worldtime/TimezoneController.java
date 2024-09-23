@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import java.sql.Time;
 import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * O controller de timezone
@@ -129,6 +131,45 @@ public class TimezoneController {
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Timezone invalida");
         }
+
+    }
+
+    /**
+     * Rota que deleta timezone pelo id
+     *
+     * @param timezoneId
+     * @return No_content
+     */
+    @DeleteMapping("/{timezoneId}")
+    public ResponseEntity<Void> deleteTimezone(@PathVariable("timezoneId") Long timezoneId) {
+
+        timezoneService.deleteTimezone(timezoneId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /**
+     * Rota que retorna todas as timezones do banco de dados
+     *
+     * @return lista de timezones
+     */
+    @GetMapping("/local")
+    public ResponseEntity<List<TimezoneDto>> getAllLocalTimezone() {
+        List<TimezoneDto> timezones = timezoneService.getAll();
+        return  new ResponseEntity<>(timezones, HttpStatus.OK);
+    }
+
+    /**
+     * Rota que pega timezone do banco de dados pelo id
+     *
+     * @param timezoneId
+     * @return timezone
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/local/{timezoneId}")
+    public TimezoneDto getLocalTimezoneById(@PathVariable("timezoneId") Long timezoneId) {
+
+       return timezoneService.getById(timezoneId);
 
     }
 

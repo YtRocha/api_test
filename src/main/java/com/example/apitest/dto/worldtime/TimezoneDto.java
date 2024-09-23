@@ -1,10 +1,12 @@
 package com.example.apitest.dto.worldtime;
 
 import jakarta.persistence.Column;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.OffsetDateTime;
 
+@AllArgsConstructor
 @Data
 public class TimezoneDto {
 

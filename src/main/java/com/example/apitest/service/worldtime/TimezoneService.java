@@ -21,6 +21,7 @@ import java.time.*;
 import java.time.temporal.IsoFields;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * A service para Timezone
@@ -120,7 +121,7 @@ public class TimezoneService {
         Optional<Timezone> timezoneAntigo = timezoneRepository.findById(timezoneId);
 
         if (timezoneAntigo.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Timezone não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Timezone não encontrado");
         }
 
         Timezone timezone = new Timezone();
@@ -143,4 +144,77 @@ public class TimezoneService {
         timezoneRepository.save(timezone);
 
     }
+
+    /**
+     * Delete timezone por ID
+     *
+     * @param timezoneId
+     */
+    public void deleteTimezone(Long timezoneId) {
+
+        Optional<Timezone> timezone = timezoneRepository.findById(timezoneId);
+
+        if (timezone.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Timezone não encontrado");
+        }
+
+        timezoneRepository.deleteById(timezoneId);
+
+    }
+
+    /**
+     * Retorna todas as timezones do banco de dados
+     *
+     * @return Lista de timezones
+     */
+    public List<TimezoneDto> getAll() {
+
+        List<Timezone> timezones = timezoneRepository.findAll();
+
+        return timezones.stream()
+                .map(this::covertToTimezoneDto)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Metodo auxiliar que converte timezone em timezoneDto
+     *
+     * @param timezone
+     * @return timezoneDto
+     */
+    private TimezoneDto covertToTimezoneDto(Timezone timezone) {
+
+        return new TimezoneDto(
+                timezone.getUtc_offset(),
+                timezone.getTimezone(),
+                timezone.getDay_of_week(),
+                timezone.getDay_of_year(),
+                timezone.getDatetime(),
+                timezone.getUtc_datetime(),
+                timezone.getUnixtime(),
+                timezone.getWeek_number()
+        );
+
+    }
+
+    /**
+     * retorna timezone pelo id
+     *
+     * @param timezoneId
+     * @return timezone
+     */
+    public TimezoneDto getById(Long timezoneId) {
+
+        Optional<Timezone> optionalTimezone = timezoneRepository.findById(timezoneId);
+
+        if (optionalTimezone.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Timezone não encontrado");
+        }
+
+        Timezone timezone = timezoneRepository.getReferenceById(timezoneId);
+
+        return covertToTimezoneDto(timezone);
+
+    }
+
 }
