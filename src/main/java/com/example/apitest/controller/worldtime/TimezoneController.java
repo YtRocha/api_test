@@ -4,24 +4,24 @@ import com.example.apitest.dto.worldtime.TimezoneCreateDto;
 import com.example.apitest.dto.worldtime.TimezoneDto;
 import com.example.apitest.dto.worldtime.TimezoneUpdateDto;
 import com.example.apitest.service.worldtime.TimezoneService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-
-import java.sql.Time;
 import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * O controller de timezone
  */
 @RestController
 @RequestMapping("/api/timezone")
+@Tag(name = "Timezone", description = "Operações para a model de timezones")
 public class TimezoneController {
 
     /**
@@ -45,6 +45,8 @@ public class TimezoneController {
      * @return Lista das timezones
      */
     @GetMapping
+    @Operation(summary = "Listar possiveis timezones",
+            description = "Retorna a lista das timezones disponiveis na api externa")
     public List<String> getTimezones() {
         return timezoneService.getTimezones();
     }
@@ -62,6 +64,8 @@ public class TimezoneController {
             "/{zone}/{zone_2}",
             "/{zone}/{zone_2}/{zone_3}"
     }, method = RequestMethod.GET)
+    @Operation(summary = "Pegar timezone externa",
+            description = "Retorna a timezone escolhida da api externa e salva a timezone no banco de dados")
     public ResponseEntity<TimezoneDto> getTimezone(
             @PathVariable("zone") String zone,
             @PathVariable(value = "zone_2", required = false) String zone2,
@@ -93,6 +97,8 @@ public class TimezoneController {
      * @return HttpStatus Created
      */
     @PostMapping
+    @Operation(summary = "Criar nova timezone",
+            description = "Cria uma nova timezone no banco de dados com base no ZoneId recebido no body")
     public ResponseEntity<Void> createTimezone(@RequestBody TimezoneCreateDto timezoneCreateDto) {
         try {
 
@@ -117,6 +123,8 @@ public class TimezoneController {
      * @return No_content
      */
     @PutMapping("/{timezoneId}")
+    @Operation(summary = "Atualizar timezone",
+            description = "Atualiza uma timezone existente no banco de dados com base no ID e nos novos dados enviados")
     public ResponseEntity<Void> updateTimezone(@PathVariable("timezoneId") Long timezoneId,
                                                @RequestBody TimezoneUpdateDto timezoneUpdateDto) {
         try {
@@ -141,6 +149,8 @@ public class TimezoneController {
      * @return No_content
      */
     @DeleteMapping("/{timezoneId}")
+    @Operation(summary = "Deletar timezone",
+            description = "Deleta uma timezone existente no banco de dados com base no ID fornecido")
     public ResponseEntity<Void> deleteTimezone(@PathVariable("timezoneId") Long timezoneId) {
 
         timezoneService.deleteTimezone(timezoneId);
@@ -154,9 +164,11 @@ public class TimezoneController {
      * @return lista de timezones
      */
     @GetMapping("/local")
+    @Operation(summary = "Listar timezones locais",
+            description = "Retorna a lista de todas as timezones salvas no banco de dados")
     public ResponseEntity<List<TimezoneDto>> getAllLocalTimezone() {
         List<TimezoneDto> timezones = timezoneService.getAll();
-        return  new ResponseEntity<>(timezones, HttpStatus.OK);
+        return new ResponseEntity<>(timezones, HttpStatus.OK);
     }
 
     /**
@@ -167,9 +179,11 @@ public class TimezoneController {
      */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/local/{timezoneId}")
+    @Operation(summary = "Pegar timezone local por ID",
+            description = "Retorna uma timezone específica do banco de dados com base no ID fornecido")
     public TimezoneDto getLocalTimezoneById(@PathVariable("timezoneId") Long timezoneId) {
 
-       return timezoneService.getById(timezoneId);
+        return timezoneService.getById(timezoneId);
 
     }
 
