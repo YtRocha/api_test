@@ -46,6 +46,10 @@ class TimezoneControllerTest {
     @Test
     @DisplayName("Get timezone OK")
     void getTimezone() throws Exception {
+        TimezoneDto timezoneDto = new TimezoneDto();
+
+        when(timezoneService.getTimezone(any())).thenReturn(timezoneDto);
+
         mockMvc.perform(get("/api/timezone/America/Recife"))
                 .andExpect(status().isOk());
     }
