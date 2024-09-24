@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.example.apitest"},{"l":"com.example.apitest.controller.worldtime"},{"l":"com.example.apitest.dto.worldtime"},{"l":"com.example.apitest.model.worldtime"},{"l":"com.example.apitest.repository.worldtime"},{"l":"com.example.apitest.service.worldtime"}];updateSearchResults();
