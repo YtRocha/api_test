@@ -1,14 +1,9 @@
 package com.example.apitest.service.worldtime;
 
 import com.example.apitest.dto.worldtime.TimezoneCreateDto;
-import com.example.apitest.dto.worldtime.TimezoneDto;
 import com.example.apitest.dto.worldtime.TimezoneUpdateDto;
 import com.example.apitest.model.worldtime.Timezone;
 import com.example.apitest.repository.worldtime.TimezoneRepository;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,9 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
 import java.util.Optional;
-import java.util.TimeZone;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
