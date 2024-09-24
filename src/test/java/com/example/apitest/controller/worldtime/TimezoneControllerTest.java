@@ -3,7 +3,6 @@ package com.example.apitest.controller.worldtime;
 import com.example.apitest.dto.worldtime.TimezoneCreateDto;
 import com.example.apitest.dto.worldtime.TimezoneDto;
 import com.example.apitest.dto.worldtime.TimezoneUpdateDto;
-import com.example.apitest.model.worldtime.Timezone;
 import com.example.apitest.service.worldtime.TimezoneService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
