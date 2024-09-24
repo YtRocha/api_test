@@ -1,6 +1,7 @@
 package com.example.apitest.service.worldtime;
 
 import com.example.apitest.dto.worldtime.TimezoneCreateDto;
+import com.example.apitest.dto.worldtime.TimezoneDto;
 import com.example.apitest.dto.worldtime.TimezoneUpdateDto;
 import com.example.apitest.model.worldtime.Timezone;
 import com.example.apitest.repository.worldtime.TimezoneRepository;
@@ -94,14 +95,38 @@ class TimezoneServiceTest {
     }
 
     @Test
-    void deleteTimezone() {
+    @DisplayName("Deve deletar timezone quando tudo estiver ok")
+    void deleteTimezoneCase1() {
+
+        Long id = 1L;
+        TimezoneUpdateDto timezoneUpdateDto = new TimezoneUpdateDto();
+        timezoneUpdateDto.setTimezone("America/Recife");
+
+        Timezone timeZone = new Timezone(1L, "", "WET", 1, 1,OffsetDateTime.now(), OffsetDateTime.now(),1L,1);
+
+        Optional<Timezone> optionalTimeZone = Optional.of(timeZone);
+
+        when(timezoneRepository.findById(id)).thenReturn(optionalTimeZone);
+
+        timezoneService.deleteTimezone(id);
+
+        verify(timezoneRepository, times(1)).deleteById(any());
+
     }
 
     @Test
-    void getAll() {
+    @DisplayName("Deve lançar exception ao tentar deletar timezone")
+    void deleteTimezoneCase2() {
+        Long id = 1L;
+
+        when(timezoneRepository.findById(id)).thenReturn(Optional.empty());
+
+        Exception thrown = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            timezoneService.deleteTimezone(id);
+        });
+
+        Assertions.assertEquals("404 NOT_FOUND \"Timezone não encontrado\"", thrown.getMessage());
+
     }
 
-    @Test
-    void getById() {
-    }
 }
