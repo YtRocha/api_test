@@ -1,7 +1,10 @@
 package com.example.apitest.model.worldtime;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.OffsetDateTime;
 
 /**
@@ -9,6 +12,8 @@ import java.time.OffsetDateTime;
  */
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Timezone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
