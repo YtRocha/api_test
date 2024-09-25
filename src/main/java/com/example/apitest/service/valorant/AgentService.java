@@ -7,11 +7,14 @@ import com.example.apitest.repository.valorant.AgentRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A service para agents
@@ -81,5 +84,22 @@ public class AgentService {
                         return Mono.error(new RuntimeException("Erro ao processar o JSON", e));
                     }
                 });
+    }
+
+    /**
+     * Metodo que busca todos os agents no banco de dados
+     *
+     * @return lista de agentDto
+     */
+    public List<AgentDto> getAll() {
+        try {
+
+            List<Agent> agents = agentRepository.findAll();
+
+            return agentMapper.toDtoList(agents);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao recuperar agents do banco de dados");
+        }
     }
 }
