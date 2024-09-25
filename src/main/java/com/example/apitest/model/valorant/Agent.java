@@ -16,6 +16,7 @@ public class Agent {
     private String uuid;
     @Column(nullable = false)
     private String displayName;
+    @Column(length = 1000)
     private String description;
     private String developerName;
     private String displayIcon;
