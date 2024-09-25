@@ -13,25 +13,50 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+/**
+ * A service para agents
+ */
 @Service
 public class AgentService {
 
 
+    /**
+     * Instancia webclient
+     */
     private final WebClient webClient;
 
+    /**
+     * Instancia do repositorio para agent
+     */
     @Autowired
     private AgentRepository agentRepository;
 
+    /**
+     * Instancia do mapper de agent
+     */
     @Autowired
     private AgentMapper agentMapper;
 
+    /**
+     * Instancia de objectMapper
+     */
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * Construtor que recebe o webclient.builder
+     *
+     * @param webClientBuilder
+     */
     public AgentService(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("https://valorant-api.com/v1").build();
     }
 
+    /**
+     * Solicita os agents na api externa e salva no banco de dados
+     *
+     * @return mono com lista de agentDto
+     */
     public Mono<List<AgentDto>> getOnlineAgentsAndSave() {
         return webClient.get()
                 .uri("/agents?isplayablecharacter=true")
