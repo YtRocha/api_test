@@ -17,7 +17,7 @@ public class Ability {
     private AbilitySlot slot;
     @Column(nullable = false)
     private String displayName;
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String description;
     private String displayIcon;
 
