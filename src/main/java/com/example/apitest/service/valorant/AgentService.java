@@ -1,11 +1,15 @@
 package com.example.apitest.service.valorant;
 
 import com.example.apitest.dto.valorant.AgentDto;
+import com.example.apitest.dto.valorant.AgentUpdateDto;
 import com.example.apitest.mapper.valorant.AgentMapper;
+import com.example.apitest.model.valorant.Ability;
+import com.example.apitest.model.valorant.AbilitySlot;
 import com.example.apitest.model.valorant.Agent;
 import com.example.apitest.repository.valorant.AgentRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -117,7 +121,7 @@ public class AgentService {
             Optional<Agent> agent = agentRepository.findByDisplayName(name);
 
             if (agent.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agente não encontrado");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
             }
 
             return agentMapper.toDto(agent.get());
@@ -138,5 +142,87 @@ public class AgentService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao criar agent no " +
                     "banco de dados");
         }
+    }
+
+    /**
+     * Metodo que atualiza um agent no banco de dados utilizando seu uuid
+     *
+     * @param agentUpdateDto
+     * @param uuid
+     */
+    public void update(AgentUpdateDto agentUpdateDto, String uuid) {
+
+            Optional<Agent> optionalAgent = agentRepository.findById(uuid);
+
+            if(optionalAgent.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
+            }
+
+            Agent agentAntigo = optionalAgent.get();
+
+            Agent agentNovo = agentMapper.UpdateDtoToEntity(agentUpdateDto);
+
+            agentNovo.setUuid(agentAntigo.getUuid());
+
+            agentRepository.save(agentNovo);
+    }
+
+    /**
+     * Metodo que atualiza parcialmente um agent no banco de dados utilizando seu uuid
+     *
+     * @param agentUpdateDto
+     * @param uuid
+     */
+    public void partialUpdate(AgentUpdateDto agentUpdateDto, String uuid) {
+        Optional<Agent> optionalAgent = agentRepository.findById(uuid);
+
+        if (optionalAgent.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
+        }
+
+        Agent agent = optionalAgent.get();
+
+
+        if (agentUpdateDto.getDisplayName() != null) {
+            agent.setDisplayName(agentUpdateDto.getDisplayName());
+        }
+        if (agentUpdateDto.getDescription() != null) {
+            agent.setDescription(agentUpdateDto.getDescription());
+        }
+        if (agentUpdateDto.getDeveloperName() != null) {
+            agent.setDeveloperName(agentUpdateDto.getDeveloperName());
+        }
+        if (agentUpdateDto.getDisplayIcon() != null) {
+            agent.setDisplayIcon(agentUpdateDto.getDisplayIcon());
+        }
+        if (agentUpdateDto.getFullPortrait() != null) {
+            agent.setFullPortrait(agentUpdateDto.getFullPortrait());
+        }
+
+        // Verifica se habilidades são atualizadas
+        if (agentUpdateDto.getAbilities() != null) {
+            List<Ability> novasHabilidades = agentUpdateDto.getAbilities();
+
+            // Percorre as listas de habilidades novas e antigas verificando o que deve ser atualizado e atualizando
+            for (int i = 0; i < novasHabilidades.size(); i++) {
+                Ability habilidadeAntiga = agent.getAbilities().get(i);
+                Ability habilidadeNova = novasHabilidades.get(i);
+
+                if(habilidadeNova.getSlot() != null) {
+                    habilidadeAntiga.setSlot(habilidadeNova.getSlot());
+                }
+                if (habilidadeNova.getDisplayName() != null) {
+                    habilidadeAntiga.setDisplayName(habilidadeNova.getDisplayName());
+                }
+                if (habilidadeNova.getDescription() != null) {
+                    habilidadeAntiga.setDescription(habilidadeNova.getDescription());
+                }
+                if (habilidadeNova.getDisplayIcon() != null) {
+                    habilidadeAntiga.setDisplayIcon(habilidadeNova.getDisplayIcon());
+                }
+
+            }
+        }
+        agentRepository.save(agent);
     }
 }

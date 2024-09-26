@@ -1,6 +1,7 @@
 package com.example.apitest.controller.valorant;
 
 import com.example.apitest.dto.valorant.AgentDto;
+import com.example.apitest.dto.valorant.AgentUpdateDto;
 import com.example.apitest.service.valorant.AgentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -178,6 +179,76 @@ public class AgentController {
         }
     }
 
+    /**
+     * Rota que atualiza todos os campos de um agent com base no uuid na url
+     *
+     * @param agentUpdateDto
+     * @param uuid
+     * @return httpstatus no content
+     */
+    @Operation(summary = "Atualizar agent", description = "Rota que atualiza todos campos de um agent")
+    @PutMapping("/{uuid}")
+    public ResponseEntity<?> update(@RequestBody AgentUpdateDto agentUpdateDto, @PathVariable("uuid") String uuid) {
+        try {
+            agentService.update(agentUpdateDto, uuid);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ResponseStatusException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", String.valueOf(e.getStatusCode()));
+            errorResponse.put("error", e.getReason());
+            errorResponse.put("message", "Ocorreu um erro ao atualizar o agent.");
+            errorResponse.put("details", e.getReason());
+
+            return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", "500");
+            errorResponse.put("error", "Internal Server Error");
+            errorResponse.put("message", "Ocorreu um erro inesperado ao atualizar o agent.");
+            errorResponse.put("details", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+
+    }
+
+    /**
+     * Rota que atualiza parcialmente um agent com base no uuid na url e os campos enviados no body da requisição
+     *
+     * @param agentUpdateDto
+     * @param uuid
+     * @return httpstatus no content
+     */
+    @Operation(summary = "Atualizar agent parcialmente", description = "Rota que atualiza parcialmente" +
+            "um agent, de acordo com os campos enviados no body")
+    @PatchMapping("/{uuid}")
+    public ResponseEntity<?> partialUpdate(@RequestBody AgentUpdateDto agentUpdateDto, @PathVariable("uuid") String uuid) {
+        try {
+            agentService.partialUpdate(agentUpdateDto, uuid);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ResponseStatusException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", String.valueOf(e.getStatusCode()));
+            errorResponse.put("error", e.getReason());
+            errorResponse.put("message", "Ocorreu um erro ao atualizar o agent.");
+            errorResponse.put("details", e.getReason());
+
+            return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", "500");
+            errorResponse.put("error", "Internal Server Error");
+            errorResponse.put("message", "Ocorreu um erro inesperado ao atualizar o agent.");
+            errorResponse.put("details", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+
+    }
 }
 
 
