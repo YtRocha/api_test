@@ -249,6 +249,39 @@ public class AgentController {
         }
 
     }
+
+    /**
+     * Rota que deleta agent do banco de dados com base no uuid passado na url
+     *
+     * @param uuid
+     * @return httpstatus no content
+     */
+    @Operation(summary = "Deletar agent", description = "Deleta um agent do banco de dados com base no uuid da url")
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<?> delete(@PathVariable("uuid") String uuid) {
+        try {
+            agentService.delete(uuid);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (ResponseStatusException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", String.valueOf(e.getStatusCode()));
+            errorResponse.put("error", e.getReason());
+            errorResponse.put("message", "Ocorreu um erro ao deletar o agent.");
+            errorResponse.put("details", e.getReason());
+
+            return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", "500");
+            errorResponse.put("error", "Internal Server Error");
+            errorResponse.put("message", "Ocorreu um erro inesperado ao deletar o agent.");
+            errorResponse.put("details", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
 }
 
 

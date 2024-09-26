@@ -4,13 +4,10 @@ import com.example.apitest.dto.valorant.AgentDto;
 import com.example.apitest.dto.valorant.AgentUpdateDto;
 import com.example.apitest.mapper.valorant.AgentMapper;
 import com.example.apitest.model.valorant.Ability;
-import com.example.apitest.model.valorant.AbilitySlot;
 import com.example.apitest.model.valorant.Agent;
 import com.example.apitest.repository.valorant.AgentRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,7 +17,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 /**
  * A service para agents
@@ -224,5 +220,21 @@ public class AgentService {
             }
         }
         agentRepository.save(agent);
+    }
+
+    /**
+     * Metodo que deleta agent do banco de dados com base no uuid
+     *
+     * @param uuid
+     */
+    public void delete(String uuid) {
+        Optional<Agent> optionalAgent = agentRepository.findById(uuid);
+
+        if(optionalAgent.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
+        }
+
+        agentRepository.delete(optionalAgent.get());
+
     }
 }
