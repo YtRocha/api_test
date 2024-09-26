@@ -123,4 +123,20 @@ public class AgentService {
             return agentMapper.toDto(agent.get());
 
     }
+
+    /**
+     * Metodo que criar um novo agent no banco
+     *
+     * @param agentDto
+     */
+    public void create(AgentDto agentDto) {
+        try{
+            Agent agent = agentMapper.toEntity(agentDto);
+
+            agentRepository.save(agent);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao criar agent no " +
+                    "banco de dados");
+        }
+    }
 }

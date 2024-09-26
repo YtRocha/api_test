@@ -4,14 +4,10 @@ import com.example.apitest.dto.valorant.AgentDto;
 import com.example.apitest.service.valorant.AgentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
@@ -113,7 +109,7 @@ public class AgentController {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("status", String.valueOf(e.getStatusCode()));
             errorResponse.put("error", e.getReason());
-            errorResponse.put("message", "Ocorreu um erro ao buscar os agents.");
+            errorResponse.put("message", "Ocorreu um erro ao buscar o agent.");
             errorResponse.put("details", e.getReason());
 
             return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
@@ -122,7 +118,60 @@ public class AgentController {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("status", "500");
             errorResponse.put("error", "Internal Server Error");
-            errorResponse.put("message", "Ocorreu um erro inesperado ao buscar os agents.");
+            errorResponse.put("message", "Ocorreu um erro inesperado ao buscar o agent.");
+            errorResponse.put("details", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    /**
+     * Rota que cria agent
+     *
+     * @param agentDto
+     * @return httpStatus Created
+     */
+    @Operation(summary = "Criar agent", description = "Rota para criar um agent, no body deve ser enviado" +
+            "Um json no formato\n" +
+            "String uuid;\n" +
+            "String displayName;\n" +
+            "String description;\n" +
+            "String developerName;\n" +
+            "String displayIcon;\n" +
+            "String fullPortrait;\n" +
+            "List<Ability> abilities;\n" +
+            "A lista de Ability deve seguir o formato\n" +
+            "AbilitySlot slot;\n" +
+            "String displayName;\n" +
+            "String description;\n" +
+            "String displayIcon;\n" +
+            "O slot deve ser um dos seguintes tipos\n" +
+            "Passive,\n" +
+            "Ability1,\n" +
+            "Ability2,\n" +
+            "Grenade,\n" +
+            "Ultimate"
+    )
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody AgentDto agentDto) {
+        try {
+            agentService.create(agentDto);
+
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (ResponseStatusException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", String.valueOf(e.getStatusCode()));
+            errorResponse.put("error", e.getReason());
+            errorResponse.put("message", "Ocorreu um erro ao criar o agent.");
+            errorResponse.put("details", e.getReason());
+
+            return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", "500");
+            errorResponse.put("error", "Internal Server Error");
+            errorResponse.put("message", "Ocorreu um erro inesperado ao criar o agent.");
             errorResponse.put("details", e.getMessage());
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
@@ -130,3 +179,5 @@ public class AgentController {
     }
 
 }
+
+
