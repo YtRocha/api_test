@@ -1,6 +1,7 @@
 package com.example.apitest.service.valorant;
 
 import com.example.apitest.dto.valorant.AgentDto;
+import com.example.apitest.dto.valorant.AgentUpdateDto;
 import com.example.apitest.mapper.valorant.AgentMapper;
 import com.example.apitest.model.valorant.Ability;
 import com.example.apitest.model.valorant.AbilitySlot;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -71,6 +73,15 @@ class AgentServiceTest {
             "https://media.valorant-api.com/agents/e370fa57-4757-3604-3648-499e1f642d3f/displayicon.png",
             "https://media.valorant-api.com/agents/e370fa57-4757-3604-3648-499e1f642d3f/fullportrait.png",
             abilities);
+
+    private AgentUpdateDto agentUpdateDto = new AgentUpdateDto("Gekko",
+            "Gekko the Angeleno leads a tight-knit crew of calamitous creatures. His buddies bound forward, scattering enemies out of the way, with Gekko chasing them down to regroup and go again.",
+            "Aggrobot",
+            "https://media.valorant-api.com/agents/e370fa57-4757-3604-3648-499e1f642d3f/displayicon.png",
+            "https://media.valorant-api.com/agents/e370fa57-4757-3604-3648-499e1f642d3f/fullportrait.png",
+            abilities);
+
+    private String uuid = "e370fa57-4757-3604-3648-499e1f642d3f";
 
     private List<Agent> agents = List.of(agent_1);
     private List<AgentDto> agentDtos = List.of(agentDto);
@@ -126,18 +137,95 @@ class AgentServiceTest {
     }
 
     @Test
-    void create() {
+    void create_Sucess() {
+        when(agentMapper.toEntity(agentDto)).thenReturn(agent_1);
+        when(agentRepository.save(any())).thenReturn(agent_1);
+
+        agentService.create(agentDto);
+
+        verify(agentMapper).toEntity(agentDto);
+        verify(agentRepository).save(agent_1);
     }
 
     @Test
-    void update() {
+    void create_Exception() {
+        when(agentRepository.save(any())).thenThrow(new RuntimeException("Erro ao acessar o banco de dados"));
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            agentService.create(any());
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+        assertEquals("Erro ao criar agent no banco de dados", exception.getReason());
     }
 
     @Test
-    void partialUpdate() {
+    void update_Sucess() {
+        when(agentRepository.findById(any())).thenReturn(Optional.of(agent_1));
+        when(agentMapper.UpdateDtoToEntity(agentUpdateDto)).thenReturn(agent_1);
+
+        agentService.update(agentUpdateDto, uuid);
+
+        verify(agentMapper).UpdateDtoToEntity(agentUpdateDto);
+        verify(agentRepository).save(agent_1);
     }
 
     @Test
-    void delete() {
+    void update_NotFound() {
+        when(agentRepository.findById(any())).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            agentService.update(any(), uuid);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertEquals("Agent não encontrado", exception.getReason());
+
+    }
+
+    @Test
+    void partialUpdate_Sucess() {
+        when(agentRepository.findById(any())).thenReturn(Optional.of(agent_1));
+
+        agentService.partialUpdate(agentUpdateDto, uuid);
+
+        verify(agentRepository).save(agent_1);
+
+    }
+
+    @Test
+    void partialUpdate_NotFound() {
+        when(agentRepository.findById(any())).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            agentService.partialUpdate(any(), uuid);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertEquals("Agent não encontrado", exception.getReason());
+
+    }
+
+    @Test
+    void delete_Sucess() {
+        when(agentRepository.findById(any())).thenReturn(Optional.of(agent_1));
+
+        agentService.delete(uuid);
+
+        verify(agentRepository).delete(agent_1);
+
+    }
+
+    @Test
+    void delete_NotFound() {
+        when(agentRepository.findById(any())).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            agentService.delete(uuid);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertEquals("Agent não encontrado", exception.getReason());
+
     }
 }
