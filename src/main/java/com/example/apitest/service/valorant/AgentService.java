@@ -6,6 +6,7 @@ import com.example.apitest.model.valorant.Agent;
 import com.example.apitest.repository.valorant.AgentRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -99,7 +101,26 @@ public class AgentService {
             return agentMapper.toDtoList(agents);
 
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao recuperar agents do banco de dados");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao recuperar agents do " +
+                    "banco de dados");
         }
+    }
+
+    /**
+     * Metodo que retorna agent especifico pelo seu nome
+     *
+     * @param name
+     * @return agentDto
+     */
+    public AgentDto getByName(String name) {
+
+            Optional<Agent> agent = agentRepository.findByDisplayName(name);
+
+            if (agent.isEmpty()) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agente não encontrado");
+            }
+
+            return agentMapper.toDto(agent.get());
+
     }
 }

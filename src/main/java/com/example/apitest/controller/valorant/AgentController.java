@@ -4,10 +4,12 @@ import com.example.apitest.dto.valorant.AgentDto;
 import com.example.apitest.service.valorant.AgentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -73,6 +75,40 @@ public class AgentController {
             List<AgentDto> agentDtos = agentService.getAll();
 
             return ResponseEntity.ok(agentDtos);
+        } catch (ResponseStatusException e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", String.valueOf(e.getStatusCode()));
+            errorResponse.put("error", e.getReason());
+            errorResponse.put("message", "Ocorreu um erro ao buscar os agents.");
+            errorResponse.put("details", e.getReason());
+
+            return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
+
+        } catch (Exception e) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("status", "500");
+            errorResponse.put("error", "Internal Server Error");
+            errorResponse.put("message", "Ocorreu um erro inesperado ao buscar os agents.");
+            errorResponse.put("details", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+    }
+
+    /**
+     * Rota get que pega o agent pelo displayName
+     *
+     * @param name
+     * @return agent
+     */
+    @Operation(summary = "Pegar agent pelo nome", description = "Retorna o agent pelo nome passado na url")
+    @GetMapping("/{agentName}")
+    public ResponseEntity<?> getByName(@PathVariable("agentName") String name) {
+        try {
+            AgentDto agentDto = agentService.getByName(name);
+
+            return ResponseEntity.ok(agentDto);
+
         } catch (ResponseStatusException e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("status", String.valueOf(e.getStatusCode()));
