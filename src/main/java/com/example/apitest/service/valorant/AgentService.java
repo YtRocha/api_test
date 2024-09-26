@@ -51,10 +51,10 @@ public class AgentService {
     /**
      * Construtor que recebe o webclient.builder
      *
-     * @param webClientBuilder
+     * @param webClient
      */
-    public AgentService(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://valorant-api.com/v1").build();
+    public AgentService(WebClient webClient) {
+        this.webClient =webClient;
     }
 
     /**
@@ -64,7 +64,7 @@ public class AgentService {
      */
     public Mono<List<AgentDto>> getOnlineAgentsAndSave() {
         return webClient.get()
-                .uri("/agents?isplayablecharacter=true")
+                .uri("https://valorant-api.com/v1/agents?isplayablecharacter=true")
                 .retrieve()
                 .bodyToMono(String.class)
                 .flatMap(response -> {
