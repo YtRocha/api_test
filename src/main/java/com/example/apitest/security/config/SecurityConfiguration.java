@@ -27,7 +27,12 @@ public class SecurityConfiguration {
             "/api/timezone/**",
             "/api/usuario",
             "/api/usuario/login",
-            "/api/usuario/deslogado"
+            "/api/usuario/deslogado",
+            "/swagger-ui/**",
+            "/v3/api-docs/**", // Para documentação OpenAPI
+            "/swagger-resources/**", // Para os recursos do Swagger
+            "/swagger-ui.html", // Para a UI do Swagger
+            "/webjars/**" // Recursos estáticos usados pelo Swagger
     };
 
     // Endpoints que requerem autenticação para serem acessados
