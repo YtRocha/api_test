@@ -26,15 +26,18 @@ public class SecurityConfiguration {
             "/api/agents/**",
             "/api/timezone/**",
             "/api/usuario",
-            "/api/usuario/login"
+            "/api/usuario/login",
+            "/api/usuario/deslogado"
     };
 
     // Endpoints que requerem autenticação para serem acessados
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
+            "/api/usuario/logado"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de administrador
     public static final String[] ENDPOINTS_ADMIN = {
+            "/api/usuario/admin"
     };
 
     /**

@@ -48,7 +48,7 @@ public class UsuarioService {
             usuarioRepository.save(usuario);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao salvar usuario no" +
-                    "banco de dados");
+                    " banco de dados");
         }
     }
 
