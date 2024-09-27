@@ -23,6 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
+            "/api/agents/**",
+            "/api/timezone/**"
     };
 
     // Endpoints que requerem autenticação para serem acessados
