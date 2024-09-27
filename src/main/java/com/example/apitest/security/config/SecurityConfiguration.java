@@ -24,7 +24,9 @@ public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/api/agents/**",
-            "/api/timezone/**"
+            "/api/timezone/**",
+            "/api/usuario",
+            "/api/usuario/login"
     };
 
     // Endpoints que requerem autenticação para serem acessados
