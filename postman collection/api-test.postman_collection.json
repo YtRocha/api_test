@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "a58150b9-be14-439b-821e-22a2555833de",
+		"name": "api-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22656047"
+	},
+	"item": [
+		{
+			"name": "Get timezones",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get timezone",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Get timezone mult /",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Criar timezone",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "update timezone",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Delete timezone",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get local",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get local pelo id",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get agents",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get Agents local",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "get agentbyName",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "create agent",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"uuid\": \"123e4567-e89b-12d3-a456-426614174000\",\r\n  \"displayName\": \"Sadistc\",\r\n  \"description\": \"An aggressive duelist with powerful fire abilities.\",\r\n  \"developerName\": \"Riot Games\",\r\n  \"displayIcon\": \"https://example.com/icons/phoenix.png\",\r\n  \"fullPortrait\": \"https://example.com/portraits/phoenix_full.png\",\r\n  \"abilities\": [\r\n    {\r\n      \"slot\": \"Ability1\",\r\n      \"displayName\": \"Curveball\",\r\n      \"description\": \"Throws a flare orb that curves, blinding all in its path.\",\r\n      \"displayIcon\": \"https://example.com/icons/curveball.png\"\r\n    },\r\n    {\r\n      \"slot\": \"Ability2\",\r\n      \"displayName\": \"Hot Hands\",\r\n      \"description\": \"Throws a fireball that creates an area of fire on the ground.\",\r\n      \"displayIcon\": \"https://example.com/icons/hot_hands.png\"\r\n    },\r\n    {\r\n      \"slot\": \"Grenade\",\r\n      \"displayName\": \"Blaze\",\r\n      \"description\": \"Creates a wall of fire that blocks vision and damages anyone passing through it.\",\r\n      \"displayIcon\": \"https://example.com/icons/blaze.png\"\r\n    },\r\n    {\r\n      \"slot\": \"Ultimate\",\r\n      \"displayName\": \"Run It Back\",\r\n      \"description\": \"Marks your location. If you die during the ability's duration, you'll be reborn at the marked location with full health.\",\r\n      \"displayIcon\": \"https://example.com/icons/run_it_back.png\"\r\n    }\r\n  ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/agents",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"agents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar agent",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar agent partial",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"Born from the eternal winter of Russia's tundra, Sova tracks, finds, and eliminates enemies with ruthless efficiency and precision. His custom bow and incredible scouting abilities ensure that even if you run, you cannot hide. \",\r\n    \"developerName\": \"Hunterssssss\",\r\n    \"abilities\": [\r\n        {\r\n            \"slot\": \"Ability1\",\r\n            \"displayName\": \"Shock Boltsssss\",\r\n            \"description\": \"EQUIP a bow with a shock bolt. FIRE to send the explosive bolt forward, detonating upon collision and damaging players nearby. HOLD FIRE to extend the range of the projectile. ALT FIRE to add up to two bounces to this arrow.sss\",\r\n            \"displayIcon\": \"https://media.valorant-api.com/agents/320b2a48-4d9b-a075-30f1-1f93a9b638fa/abilities/ability1/displayicon.pngss\"\r\n        },\r\n        {\r\n            \"displayName\": \"Recon Boltsss\"\r\n        },\r\n        {\r\n            \"slot\": \"Grenade\",\r\n            \"displayName\": \"Owl Drone\",\r\n            \"description\": \"EQUI\"\r\n        },\r\n        {\r\n            \"displayIcon\": \"https\"\r\n        },\r\n        {\r\n            \"slot\": \"Passive\",\r\n            \"displayName\": \"Uncanny Marksman\",\r\n            \"description\": \"Sova's custom bow can fire his arrows and bounce them off terrain. Holding fire charges the bow's power, and the bolt is loosed when released. Press alt fire to change the number of bounces.Your arrows can bounce off terrain. Holding left click increases the bow's range trajectory. Right clicking Toggle through the desired number of terrain bounces by right clicking. The arrow is loosed when left click is released.\",\r\n            \"displayIcon\": null\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/agents/320b2a48-4d9b-a075-30f1-1f93a9b638fa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"agents",
+						"320b2a48-4d9b-a075-30f1-1f93a9b638fa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete agent",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastro de usuario",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Deslogado",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Logado",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Admin",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
