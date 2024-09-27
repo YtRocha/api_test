@@ -78,7 +78,7 @@ public class UsuarioController {
             RecoveryJwtTokenDto token = usuarioService.authenticateUser(usuarioLoginDto);
             return new ResponseEntity<>(token, HttpStatus.OK);
 
-        }  catch (ResponseStatusException e) {
+        } catch (ResponseStatusException e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("status", String.valueOf(e.getStatusCode()));
             errorResponse.put("error", e.getReason());

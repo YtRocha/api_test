@@ -58,7 +58,7 @@ class TimezoneServiceTest {
         timezoneUpdateDto.setTimezone("America/Recife");
 
 
-        Timezone timeZone = new Timezone(1L, "", "WET", 1, 1,OffsetDateTime.now(), OffsetDateTime.now(),1L,1);
+        Timezone timeZone = new Timezone(1L, "", "WET", 1, 1, OffsetDateTime.now(), OffsetDateTime.now(), 1L, 1);
 
 
         Optional<Timezone> optionalTimeZone = Optional.of(timeZone);
@@ -95,7 +95,7 @@ class TimezoneServiceTest {
         TimezoneUpdateDto timezoneUpdateDto = new TimezoneUpdateDto();
         timezoneUpdateDto.setTimezone("America/Recife");
 
-        Timezone timeZone = new Timezone(1L, "", "WET", 1, 1,OffsetDateTime.now(), OffsetDateTime.now(),1L,1);
+        Timezone timeZone = new Timezone(1L, "", "WET", 1, 1, OffsetDateTime.now(), OffsetDateTime.now(), 1L, 1);
 
         Optional<Timezone> optionalTimeZone = Optional.of(timeZone);
 

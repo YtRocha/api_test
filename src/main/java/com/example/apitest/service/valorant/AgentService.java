@@ -54,7 +54,7 @@ public class AgentService {
      * @param webClient
      */
     public AgentService(WebClient webClient) {
-        this.webClient =webClient;
+        this.webClient = webClient;
     }
 
     /**
@@ -114,13 +114,13 @@ public class AgentService {
      */
     public AgentDto getByName(String name) {
 
-            Optional<Agent> agent = agentRepository.findByDisplayName(name);
+        Optional<Agent> agent = agentRepository.findByDisplayName(name);
 
-            if (agent.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
-            }
+        if (agent.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
+        }
 
-            return agentMapper.toDto(agent.get());
+        return agentMapper.toDto(agent.get());
 
     }
 
@@ -130,7 +130,7 @@ public class AgentService {
      * @param agentDto
      */
     public void create(AgentDto agentDto) {
-        try{
+        try {
             Agent agent = agentMapper.toEntity(agentDto);
 
             agentRepository.save(agent);
@@ -148,19 +148,19 @@ public class AgentService {
      */
     public void update(AgentUpdateDto agentUpdateDto, String uuid) {
 
-            Optional<Agent> optionalAgent = agentRepository.findById(uuid);
+        Optional<Agent> optionalAgent = agentRepository.findById(uuid);
 
-            if(optionalAgent.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
-            }
+        if (optionalAgent.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
+        }
 
-            Agent agentAntigo = optionalAgent.get();
+        Agent agentAntigo = optionalAgent.get();
 
-            Agent agentNovo = agentMapper.UpdateDtoToEntity(agentUpdateDto);
+        Agent agentNovo = agentMapper.UpdateDtoToEntity(agentUpdateDto);
 
-            agentNovo.setUuid(agentAntigo.getUuid());
+        agentNovo.setUuid(agentAntigo.getUuid());
 
-            agentRepository.save(agentNovo);
+        agentRepository.save(agentNovo);
     }
 
     /**
@@ -204,7 +204,7 @@ public class AgentService {
                 Ability habilidadeAntiga = agent.getAbilities().get(i);
                 Ability habilidadeNova = novasHabilidades.get(i);
 
-                if(habilidadeNova.getSlot() != null) {
+                if (habilidadeNova.getSlot() != null) {
                     habilidadeAntiga.setSlot(habilidadeNova.getSlot());
                 }
                 if (habilidadeNova.getDisplayName() != null) {
@@ -230,7 +230,7 @@ public class AgentService {
     public void delete(String uuid) {
         Optional<Agent> optionalAgent = agentRepository.findById(uuid);
 
-        if(optionalAgent.isEmpty()) {
+        if (optionalAgent.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Agent não encontrado");
         }
 

@@ -20,7 +20,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -81,7 +80,7 @@ class AgentControllerTest {
     private List<AgentDto> agentDtos = List.of(agentDto);
 
     @Test
-    void getAll_Sucess() throws Exception{
+    void getAll_Sucess() throws Exception {
         mockMvc.perform(get("/api/agents"))
                 .andExpect(status().isOk());
     }
@@ -105,7 +104,7 @@ class AgentControllerTest {
     }
 
     @Test
-    void getByName_Sucess() throws Exception{
+    void getByName_Sucess() throws Exception {
         when(agentService.getByName(any())).thenReturn(agentDto);
 
         mockMvc.perform(get("/api/agents/Gekko"))
@@ -132,12 +131,12 @@ class AgentControllerTest {
 
 
     @Test
-    void create_Sucess() throws Exception{
+    void create_Sucess() throws Exception {
         doNothing().when(agentService).create(agentDto);
 
         mockMvc.perform(post("/api/agents")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(agentDto)))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(agentDto)))
                 .andExpect(status().isCreated());
 
     }
@@ -153,8 +152,8 @@ class AgentControllerTest {
         doThrow(exception).when(agentService).create(agentDto);
 
         mockMvc.perform(post("/api/agents")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(agentDto)))
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(agentDto)))
                 .andExpect(status().is(status))
                 .andExpect(jsonPath("$.error").value(expectedDetails))
                 .andExpect(jsonPath("$.message").value(expectedMessage))
@@ -162,7 +161,7 @@ class AgentControllerTest {
     }
 
     @Test
-    void update_Sucess() throws Exception{
+    void update_Sucess() throws Exception {
         doNothing().when(agentService).update(agentUpdateDto, uuid);
 
         mockMvc.perform(put("/api/agents/any")
@@ -193,7 +192,7 @@ class AgentControllerTest {
 
 
     @Test
-    void partialUpdate_Sucess() throws Exception{
+    void partialUpdate_Sucess() throws Exception {
         doNothing().when(agentService).partialUpdate(agentUpdateDto, uuid);
 
         mockMvc.perform(patch("/api/agents/any")
@@ -224,7 +223,7 @@ class AgentControllerTest {
     }
 
     @Test
-    void delete_Sucess() throws Exception{
+    void delete_Sucess() throws Exception {
         doNothing().when(agentService).delete(uuid);
 
         mockMvc.perform(delete("/api/agents/any"))

@@ -73,7 +73,7 @@ public class SecurityConfiguration {
     }
 
     /**
-     *  criptografa a senha do usuario usando o BCrypt
+     * criptografa a senha do usuario usando o BCrypt
      *
      * @return Senha criptografada
      */

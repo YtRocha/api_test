@@ -1,7 +1,6 @@
 package com.example.apitest.dto.usuario;
 
 import com.example.apitest.model.usuario.TipoUsuario;
-
 import lombok.Data;
 
 @Data

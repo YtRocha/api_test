@@ -37,7 +37,6 @@ public class UsuarioService {
 
     /**
      * Cria um novo usuario
-     *
      */
     public void create(UsuarioCadastroDto usuarioCadastroDto) {
         try {
