@@ -193,10 +193,60 @@ class AgentControllerTest {
 
 
     @Test
-    void partialUpdate() {
+    void partialUpdate_Sucess() throws Exception{
+        doNothing().when(agentService).partialUpdate(agentUpdateDto, uuid);
+
+        mockMvc.perform(patch("/api/agents/any")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(agentUpdateDto)))
+                .andExpect(status().isNoContent());
+
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "400, 'Erro de validação', 'Ocorreu um erro ao atualizar o agent.', 'Erro de validação'",
+            "404, 'Agentes não encontrados', 'Ocorreu um erro ao atualizar o agent.', 'Agentes não encontrados'",
+            "500, 'Internal Server Error', 'Ocorreu um erro ao atualizar o agent.', 'Internal Server Error'"
+    })
+    void partialUpdate_Exception(int status, String errorMessage, String expectedMessage, String expectedDetails) throws Exception {
+        ResponseStatusException exception = new ResponseStatusException(HttpStatus.valueOf(status), errorMessage);
+        doThrow(exception).when(agentService).partialUpdate(any(AgentUpdateDto.class), anyString());
+
+        mockMvc.perform(patch("/api/agents/any")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(agentUpdateDto)))
+                .andExpect(status().is(status))
+                .andExpect(jsonPath("$.error").value(expectedDetails))
+                .andExpect(jsonPath("$.message").value(expectedMessage))
+                .andExpect(jsonPath("$.details").value(errorMessage));
     }
 
     @Test
-    void delete() {
+    void delete_Sucess() throws Exception{
+        doNothing().when(agentService).delete(uuid);
+
+        mockMvc.perform(delete("/api/agents/any"))
+                .andExpect(status().isNoContent());
+
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "400, 'Erro de validação', 'Ocorreu um erro ao deletar o agent.', 'Erro de validação'",
+            "404, 'Agentes não encontrados', 'Ocorreu um erro ao deletar o agent.', 'Agentes não encontrados'",
+            "500, 'Internal Server Error', 'Ocorreu um erro ao deletar o agent.', 'Internal Server Error'"
+    })
+    void delete_Exception(int status, String errorMessage, String expectedMessage, String expectedDetails) throws Exception {
+        ResponseStatusException exception = new ResponseStatusException(HttpStatus.valueOf(status), errorMessage);
+        doThrow(exception).when(agentService).delete(anyString());
+
+        mockMvc.perform(delete("/api/agents/any"))
+                .andExpect(status().is(status))
+                .andExpect(jsonPath("$.error").value(expectedDetails))
+                .andExpect(jsonPath("$.message").value(expectedMessage))
+                .andExpect(jsonPath("$.details").value(errorMessage));
+    }
+
 }
