@@ -5,6 +5,10 @@ import com.example.apitest.dto.usuario.UsuarioCadastroDto;
 import com.example.apitest.dto.usuario.UsuarioLoginDto;
 import com.example.apitest.service.usuario.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.HashMap;
 import java.util.Map;
 
+@SecuritySchemes({
+        @SecurityScheme(name = "bearerAuth", type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
+})
 @RestController
 @RequestMapping("/api/usuario")
 @Tag(name = "Usuarios", description = "Operações para autenticação de usuarios, note que o crud de usuario não" +
@@ -99,13 +106,15 @@ public class UsuarioController {
         return "Sou acessada mesmo sem login!";
     }
 
-    @Operation(summary = "Acesso apenas com login", description = "Rota para testar com login")
+    @Operation(summary = "Acesso apenas com login", description = "Rota para testar com login",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/logado")
     String rotaLogado() {
         return "Estou logado!";
     }
 
-    @Operation(summary = "Acesso apenas com admin", description = "Rota para testar como admin")
+    @Operation(summary = "Acesso apenas com admin", description = "Rota para testar como admin",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/admin")
     String admin() {
         return "Sou admin!";
